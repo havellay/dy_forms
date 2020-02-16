@@ -70,7 +70,6 @@ class ValueOperator(Operator):
     return []
 
   def eval(self):
-    import ipdb; ipdb.set_trace()
     return self.value,make_data_type_instance({"type":self.type, "subordinate":True})
 
 def make_operator_instance(definition_dict=None, form=None):

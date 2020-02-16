@@ -1,4 +1,22 @@
 class DataType(object):
+  """
+  All types of data that Fields can contain are derived from
+  the DataType class.
+
+  Each Field has a member data_type that it can use to check
+  validity of input data. By having a separate instance of
+  a DataType class for each field, other constraints such as
+  size / length of data etc. may be enforced for each Field.
+  
+  A subordinate instance of DataType is one which doesn't have
+  the full definition of the data type and will be superseded
+  by a non subordinate data type instance. For example, a
+  subordinate EnumeratedDataType instance will not have the
+  full set of possible values that the enumerated type can
+  hold, and so, cannot be expected to perform data ingestion
+  or validation etc. Such subordinate fields exist as a place-
+  holder for VALUE operators.
+  """
   def __init__(self, type=None, subordinate=False):
     self.type=type
     self.subordinate=subordinate

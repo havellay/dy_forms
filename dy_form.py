@@ -19,7 +19,6 @@ class Form(object):
     ):
     self.title = title
     self.description = description
-    self.on_load_fields = {}
     self.fields = {}
     self.process_fields(fields)
 
@@ -35,19 +34,22 @@ class Form(object):
         )
       field = Field(**field_def, form=self)
       self.fields[field_name] = field
-      if field.is_on_load():
-        self.on_load_fields[field_name] = field
     return
 
   def get_field(self, field_name):
     return self.fields.get(field_name)
 
   def load(self):
-    """
-    Looks at all fields and loads them
-    """
     for field_name,field in self.fields.items():
       field.load()
+    return
+
+  def process_dependent_fields(self, dependent_fields=None):
+    for field in dependent_fields:
+      if field.eval_load_upon():
+        field.activate()
+      else:
+        field.deactivate()
     return
 
   def interactive(self):
@@ -57,14 +59,14 @@ class Form(object):
       if ip == "EXIT":
         print("Exiting")
         break
+      elif ip == "SUBMIT":
+        print("Submitting")
+        self.submit()
+        break
       chosen_field = self.fields.get(ip)
       if chosen_field:
         dependent_fields = chosen_field.interactive()
-        for field in dependent_fields:
-          if field.eval_load_upon():
-            field.activate()
-          else:
-            field.deactivate()
+        self.process_dependent_fields(dependent_fields=dependent_fields)
       else:
         print("Incorrect field name")
     return
@@ -79,7 +81,11 @@ class Form(object):
     return
 
   def submit(self):
-    return
+    submit_object = {}
+    for field_name,field in self.fields.items():
+      submit_object[field_name] = field.get_value()
+    print(submit_object)
+    return submit_object
 
 def main():
   file_name = input(
@@ -91,7 +97,6 @@ def main():
 
   form.load()
   form.interactive()
-  form.submit()
 
 if __name__ == "__main__":
   main()

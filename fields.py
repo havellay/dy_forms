@@ -4,11 +4,10 @@ from operators import make_operator_instance, ValueOperator
 
 class Field(object):
   def __init__(
-      self, fieldName=None, number=None, dataType=None,
+      self, fieldName=None, dataType=None,
       onLoad=False, loadUpon=None, form=None
     ):
     self.name = fieldName
-    self.number = number
     self.is_active = False
 
     self.data_type = make_data_type_instance(
@@ -17,7 +16,6 @@ class Field(object):
     self.value = None
 
     self.on_load = onLoad
-    # self.form = form
     self.forward_dependency = []
 
     if loadUpon:
@@ -28,7 +26,6 @@ class Field(object):
       self.load_upon_reverse_dependencies = self.load_upon.find_dependencies()
       for field in self.load_upon_reverse_dependencies:
         field.register_forward_dependency(dependent_field=self)
-      # self.load_upon.eval() -> returns True or False
 
   def register_forward_dependency(self, dependent_field=None):
     self.forward_dependency.append(dependent_field)
@@ -78,7 +75,8 @@ class Field(object):
       if self.set_value(value=ip):
         print("Value changed successfully")
         forward_dependency_to_return = self.forward_dependency
-        # process dependent fields
+      else:
+        print("Incorrect value for this field")
     print("Returning to form menu")
     return forward_dependency_to_return
 

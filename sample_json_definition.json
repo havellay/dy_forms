@@ -4,7 +4,6 @@
   "fields":[
 
     {
-      "number":10,
       "fieldName":"CreatedBy",
       "dataType":{
         "type":"text"
@@ -13,7 +12,6 @@
     },
 
     {
-      "number":20,
       "fieldName":"Description",
       "dataType":{
         "type":"text"
@@ -22,7 +20,6 @@
     },
 
     {
-      "number":30,
       "fieldName":"Severity",
       "dataType":{
         "type":"number"
@@ -31,7 +28,6 @@
     },
 
     {
-      "number":40,
       "fieldName":"Status",
       "dataType":{
         "type":"enumerated",
@@ -44,7 +40,6 @@
     },
 
     {
-      "number":50,
       "fieldName":"CancelledReason",
       "dataType":{
         "type":"enumerated",
@@ -72,7 +67,6 @@
     },
 
     {
-      "number":60,
       "fieldName":"CancelledOtherDescription",
       "dataType":{
         "type":"text"
@@ -96,7 +90,6 @@
     },
 
     {
-      "number":70,
       "fieldName":"Comments",
       "dataType":{
         "type":"text"
