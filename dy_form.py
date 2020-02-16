@@ -1,18 +1,12 @@
 import json
 
-from data_types import (
-    DataType, TextDataType, NumberDataType,
-    EnumeratedDataType, make_data_type_instance,
-  )
-
-from operators import (
-    Operator, EqualOperator, FieldReferenceOperator,
-    ValueOperator, make_operator_instance,
-  )
-
 from fields import Field
 
 class Form(object):
+  """
+  Form contains Fields and Fields can contain values and have
+  specific conditions that trigger them.
+  """
   def __init__(
       self, title=None,
       description=None, fields=None
@@ -45,6 +39,15 @@ class Form(object):
     return
 
   def process_dependent_fields(self, dependent_fields=None):
+    """
+    Fields can be dependent on one-another - If a particular
+    field A becomes active (is displayed) when another field B
+    contains a specific value, there is a forward directional
+    dependency from field B to A. So, everytime data is entered
+    in a field, all fields that have a forward dependencies to
+    this field are evaluated and it is decided whether to
+    activate them or not.
+    """
     for field in dependent_fields:
       if field.eval_load_upon():
         field.activate()
@@ -81,10 +84,14 @@ class Form(object):
     return
 
   def submit(self):
+    """ 
+    Just prints a representation of the current state of the
+    form's fields
+    """
     submit_object = {}
     for field_name,field in self.fields.items():
       submit_object[field_name] = field.get_value()
-    print(submit_object)
+    print(repr(submit_object))
     return submit_object
 
 def main():

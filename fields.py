@@ -1,6 +1,6 @@
 from data_types import make_data_type_instance
 
-from operators import make_operator_instance, ValueOperator
+from operators import make_operator_instance
 
 class Field(object):
   def __init__(
@@ -17,12 +17,20 @@ class Field(object):
 
     self.on_load = onLoad
     self.forward_dependency = []
+    # refer Form.process_dependent_fields()
 
     if loadUpon:
+      """
+      load_upon is an operator that can be evaluated
+      When load_upon is evaluated to True, this particular
+      Field must now become active
+      """
       self.load_upon = make_operator_instance(
         definition_dict=loadUpon,
         form=form
       )
+      # When processing fields, we can only know the reverse dependencies;
+      # using these, we register forward dependencies at a later stage.
       self.load_upon_reverse_dependencies = self.load_upon.find_dependencies()
       for field in self.load_upon_reverse_dependencies:
         field.register_forward_dependency(dependent_field=self)
@@ -56,6 +64,11 @@ class Field(object):
     )
 
   def set_value(self, value=None):
+    """
+    Uses an instance of the appropriate data type
+    to check whether value is appropriate for this
+    Field; if yes, stores in self.value
+    """
     try:
       self.value = self.data_type.process(value)
     except Exception as e:

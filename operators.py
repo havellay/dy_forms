@@ -1,6 +1,14 @@
 from data_types import make_data_type_instance
 
 class Operator(object):
+  """
+  An Operator allows definition of a condition that can be evaluated;
+  This can be done by calling the eval() method;
+  At this time, only EqualOperator, FieldReferenceOperator and ValueOperator
+  are defined. Other possible operators are ContainsOperator, GreaterThanOperater,
+  AndOperator, NotOperator etc.
+  Such Operators allow for specification of non-trivial conditions.
+  """
   def __init__(self):
     pass
 
@@ -8,6 +16,10 @@ class Operator(object):
     return []
   
 class EqualOperator(Operator):
+  """
+  EqualOperator has two operands and checks whether first operand's value
+  is equal to the second operand;
+  """
   def __init__(
       self, operator=None, operand1=None,
       operand2=None, form=None,
@@ -27,6 +39,11 @@ class EqualOperator(Operator):
     return dependencies
 
   def eval(self):
+    """
+    Since ValueOperators can have an incomplete data-type instance,
+    it is important to use the more complete data-type definition
+    for evaluation.
+    """
     op1_eval,op1_data_type = self.operand1.eval()
     op2_eval,op2_data_type  = self.operand2.eval()
     if type(op1_data_type) != type(op2_data_type):
@@ -36,6 +53,10 @@ class EqualOperator(Operator):
     return op1_data_type.is_equal(op1_eval, op2_eval)
 
 class FieldReferenceOperator(Operator):
+  """
+  Used to denote value contained in a Field when defining conditions
+  in loadUpon
+  """
   def __init__(
       self, operator=None, operand1=None,
       operand2=None, form=None,
