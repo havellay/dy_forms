@@ -1,0 +1,117 @@
+{
+  "title":"some title",
+  "description":"some description",
+  "fields":[
+
+    {
+      "fieldName":"CreatedBy",
+      "dataType":{
+        "type":"text"
+      },
+      "onLoad":"true"
+    },
+
+    {
+      "fieldName":"Description",
+      "dataType":{
+        "type":"text"
+      },
+      "onLoad":"true"
+    },
+
+    {
+      "fieldName":"Severity",
+      "dataType":{
+        "type":"number"
+      },
+      "onLoad":"true"
+    },
+
+    {
+      "fieldName":"Status",
+      "dataType":{
+        "type":"enumerated",
+        "values":[
+          "CANCELLED",
+          "COMPLETED"
+        ]
+      },
+      "onLoad":"true"
+    },
+
+    {
+      "fieldName":"CancelledReason",
+      "dataType":{
+        "type":"enumerated",
+        "values":[
+          "ENDUSER",
+          "OTHERS"
+        ]
+      },
+      "loadUpon":{
+        "operator":"EQUAL",
+        "operand1":{
+          "operator":"FIELD",
+          "operand1":{
+            "fieldName":"Status"
+          }
+        },
+        "operand2":{
+          "operator":"VALUE",
+          "operand1":{
+            "type":"enumerated",
+            "value":"CANCELLED"
+          }
+        }
+      }
+    },
+
+    {
+      "fieldName":"CancelledOtherDescription",
+      "dataType":{
+        "type":"text"
+      },
+      "loadUpon":{
+        "operator":"EQUAL",
+        "operand1":{
+          "operator":"FIELD",
+          "operand1":{
+            "fieldName":"CancelledReason"
+          }
+        },
+        "operand2":{
+          "operator":"VALUE",
+          "operand1":{
+            "type":"enumerated",
+            "value":"OTHER"
+          }
+        }
+      }
+    },
+
+    {
+      "fieldName":"Comments",
+      "dataType":{
+        "type":"text"
+      },
+      "loadUpon":{
+        "operator":"EQUAL",
+        "operand1":{
+          "operator":"FIELD",
+          "operand1":{
+            "fieldName":"Status"
+          }
+        },
+        "operand2":{
+          "operator":"VALUE",
+          "operand1":{
+            "type":"enumerated",
+            "value":"COMPLETED"
+          }
+        }
+      }
+    }
+
+  ]
+}
+
