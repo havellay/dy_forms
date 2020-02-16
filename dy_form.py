@@ -50,9 +50,6 @@ class Form(object):
       field.load()
     return
 
-  def process_field_dependencies(self):
-    return
-
   def interactive(self):
     while True:
       self.print_status()

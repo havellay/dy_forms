@@ -3,9 +3,6 @@ class DataType(object):
     self.type=type
     self.subordinate=subordinate
 
-  def get_name(self):
-    return self.type
-
   def to_string(self, value):
     return value.__str__()
 
