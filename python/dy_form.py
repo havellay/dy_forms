@@ -10,28 +10,7 @@ from operators import (
     ValueOperator, make_operator_instance,
   )
 
-class Field(object):
-  def __init__(
-      self, fieldName=None, dataType=None,
-      onLoad=False, loadUpon=None, form=None
-    ):
-    self.name = fieldName
-    self.data_type = make_data_type_instance(
-      definition_dict=dataType,
-    )
-    self.on_load = onLoad
-    self.form = form
-
-    if loadUpon:
-      self.load_upon = make_operator_instance(
-        definition_dict=loadUpon,
-        form=form
-      )
-      # self.load_upon.eval() -> returns True or False
-    return
-
-  def is_on_load(self):
-    return self.on_load
+from fields import Field
 
 class Form(object):
   def __init__(
@@ -58,26 +37,48 @@ class Form(object):
       self.fields[field_name] = field
       if field.is_on_load():
         self.on_load_fields[field_name] = field
-    ###
     return
 
   def get_field(self, field_name):
     return self.fields.get(field_name)
 
-  def load_form(self):
+  def load(self):
+    """
+    Looks at all fields and loads them
+    """
+    for field_name,field in self.fields.items():
+      field.load()
     return
 
   def process_field_dependencies(self):
     return
 
   def interactive(self):
-    ip = ""
-    self.print_status()
-    while ip != "EXIT":
-      ip = raw_input("Select field to interact with : ")
+    while True:
+      self.print_status()
+      ip = input("Select field to interact with, EXIT / SUBMIT : ")
+      if ip == "EXIT":
+        print("Exiting")
+        break
+      chosen_field = self.fields.get(ip)
+      if chosen_field:
+        dependent_fields = chosen_field.interactive()
+        for field in dependent_fields:
+          if field.eval_load_upon():
+            field.activate()
+          else:
+            field.deactivate()
+      else:
+        print("Incorrect field name")
     return
 
   def print_status(self):
+    """
+    Prints current active fields, data contained in active fields
+    """
+    for field_name,field in self.fields.items():
+      if field.is_active:
+        print("{}".format(field))
     return
 
   def submit(self):
